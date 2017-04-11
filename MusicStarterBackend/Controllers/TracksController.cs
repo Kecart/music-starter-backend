@@ -4,15 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using MusicStarterBackend.Models;
 
 namespace MusicStarterBackend.Controllers
 {
     public class TracksController : ApiController
     {
-        // GET api/tracks 
-        public IEnumerable<string> Get()
+        private Track[] tracks = new Track[]
         {
-            return new string[] { "track1", "track2" };
+            new Track { Author = "Author1", Title = "Title1", Duration = new TimeSpan(0, 2, 10) },
+            new Track { Author = "Author2", Title = "Title2", Duration = new TimeSpan(0, 0, 52) }
+        };
+
+        // GET api/tracks 
+        public IEnumerable<Track> Get()
+        {
+            return tracks;
         }
 
         //// GET api/values/5 
