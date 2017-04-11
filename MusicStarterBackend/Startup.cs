@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Owin;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace MusicStarterBackend
 {
@@ -14,8 +15,10 @@ namespace MusicStarterBackend
         // parameter in the WebApp.Start method.
         public void Configuration(IAppBuilder appBuilder)
         {
+            var cors = new EnableCorsAttribute("*","*","*");
             // Configure Web API for self-host. 
             HttpConfiguration config = new HttpConfiguration();
+            config.EnableCors(cors);
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
