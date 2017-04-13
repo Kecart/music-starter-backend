@@ -86,7 +86,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\TracksController.cs" />
+    <Compile Include="Models\Author.cs" />
     <Compile Include="Models\Track.cs" />
+    <Compile Include="NamespaceDoc.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
