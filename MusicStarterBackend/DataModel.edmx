@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DataModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="DataModelStoreContainer">
+    <EntitySet Name="AuthorSet" EntityType="DataModel.Store.AuthorSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="TrackSet" EntityType="DataModel.Store.TrackSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="AlbumSet" EntityType="DataModel.Store.AlbumSet" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="AuthorTrack" Association="DataModel.Store.AuthorTrack">
+      <End Role="Author" EntitySet="AuthorSet" />
+      <End Role="Track" EntitySet="TrackSet" />
+    </AssociationSet>
+    <AssociationSet Name="AuthorAlbum" Association="DataModel.Store.AuthorAlbum">
+      <End Role="Author" EntitySet="AuthorSet" />
+      <End Role="Album" EntitySet="AlbumSet" />
+    </AssociationSet>
+    <AssociationSet Name="AlbumTrack" Association="DataModel.Store.AlbumTrack">
+      <End Role="Album" EntitySet="AlbumSet" />
+      <End Role="Track" EntitySet="TrackSet" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="AuthorSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TrackSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Duration" Type="time" Nullable="false" />
+    <Property Name="DateTime" Type="datetime" Nullable="false" />
+    <Property Name="Rating" Type="float" Nullable="false" />
+    <Property Name="File" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Author_Id" Type="int" Nullable="false" />
+    <Property Name="Album_Id" Type="int" Nullable="true" />
+  </EntityType>
+  <EntityType Name="AlbumSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CoverFile" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Author_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="AuthorTrack">
+    <End Role="Author" Type="DataModel.Store.AuthorSet" Multiplicity="1" />
+    <End Role="Track" Type="DataModel.Store.TrackSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Author">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Track">
+        <PropertyRef Name="Author_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="AuthorAlbum">
+    <End Role="Author" Type="DataModel.Store.AuthorSet" Multiplicity="1" />
+    <End Role="Album" Type="DataModel.Store.AlbumSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Author">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Album">
+        <PropertyRef Name="Author_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="AlbumTrack">
+    <End Role="Album" Type="DataModel.Store.AlbumSet" Multiplicity="0..1" />
+    <End Role="Track" Type="DataModel.Store.TrackSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Album">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Track">
+        <PropertyRef Name="Album_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="DataModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="DataModelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AuthorSet" EntityType="DataModel.Author" />
+          <EntitySet Name="TrackSet" EntityType="DataModel.Track" />
+          <AssociationSet Name="AuthorTrack" Association="DataModel.AuthorTrack">
+            <End Role="Author" EntitySet="AuthorSet" />
+            <End Role="Track" EntitySet="TrackSet" />
+          </AssociationSet>
+          <EntitySet Name="AlbumSet" EntityType="DataModel.Album" />
+          <AssociationSet Name="AuthorAlbum" Association="DataModel.AuthorAlbum">
+            <End Role="Author" EntitySet="AuthorSet" />
+            <End Role="Album" EntitySet="AlbumSet" />
+          </AssociationSet>
+          <AssociationSet Name="AlbumTrack" Association="DataModel.AlbumTrack">
+            <End Role="Album" EntitySet="AlbumSet" />
+            <End Role="Track" EntitySet="TrackSet" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Author">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Tracks" Relationship="DataModel.AuthorTrack" FromRole="Author" ToRole="Track" />
+          <NavigationProperty Name="Albums" Relationship="DataModel.AuthorAlbum" FromRole="Author" ToRole="Album" />
+        </EntityType>
+        <EntityType Name="Track">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" />
+          <Property Name="Duration" Type="Time" Nullable="false" />
+          <Property Name="DateTime" Type="DateTime" Nullable="false" />
+          <Property Name="Rating" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Author" Relationship="DataModel.AuthorTrack" FromRole="Track" ToRole="Author" />
+          <Property Name="File" Type="String" Nullable="false" />
+          <NavigationProperty Name="Album" Relationship="DataModel.AlbumTrack" FromRole="Track" ToRole="Album" />
+        </EntityType>
+        <Association Name="AuthorTrack">
+          <End Type="DataModel.Author" Role="Author" Multiplicity="1" />
+          <End Type="DataModel.Track" Role="Track" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Album">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="CoverFile" Type="String" Nullable="false" />
+          <NavigationProperty Name="Author" Relationship="DataModel.AuthorAlbum" FromRole="Album" ToRole="Author" />
+          <NavigationProperty Name="Tracks" Relationship="DataModel.AlbumTrack" FromRole="Album" ToRole="Track" />
+        </EntityType>
+        <Association Name="AuthorAlbum">
+          <End Type="DataModel.Author" Role="Author" Multiplicity="1" />
+          <End Type="DataModel.Album" Role="Album" Multiplicity="*" />
+        </Association>
+        <Association Name="AlbumTrack">
+          <End Type="DataModel.Album" Role="Album" Multiplicity="0..1" />
+          <End Type="DataModel.Track" Role="Track" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DataModelStoreContainer" CdmEntityContainer="DataModelContainer">
+    <EntitySetMapping Name="AuthorSet">
+      <EntityTypeMapping TypeName="IsTypeOf(DataModel.Author)">
+        <MappingFragment StoreEntitySet="AuthorSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TrackSet">
+      <EntityTypeMapping TypeName="IsTypeOf(DataModel.Track)">
+        <MappingFragment StoreEntitySet="TrackSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Duration" ColumnName="Duration" />
+          <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+          <ScalarProperty Name="Rating" ColumnName="Rating" />
+          <ScalarProperty Name="File" ColumnName="File" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AlbumSet">
+      <EntityTypeMapping TypeName="IsTypeOf(DataModel.Album)">
+        <MappingFragment StoreEntitySet="AlbumSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="CoverFile" ColumnName="CoverFile" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="AuthorTrack" TypeName="DataModel.AuthorTrack" StoreEntitySet="TrackSet">
+      <EndProperty Name="Author">
+        <ScalarProperty Name="Id" ColumnName="Author_Id" />
+      </EndProperty>
+      <EndProperty Name="Track">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="AuthorAlbum" TypeName="DataModel.AuthorAlbum" StoreEntitySet="AlbumSet">
+      <EndProperty Name="Author">
+        <ScalarProperty Name="Id" ColumnName="Author_Id" />
+      </EndProperty>
+      <EndProperty Name="Album">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="AlbumTrack" TypeName="DataModel.AlbumTrack" StoreEntitySet="TrackSet">
+      <EndProperty Name="Album">
+        <ScalarProperty Name="Id" ColumnName="Album_Id" />
+      </EndProperty>
+      <EndProperty Name="Track">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+      <Condition ColumnName="Album_Id" IsNull="false" />
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

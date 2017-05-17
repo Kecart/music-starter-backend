@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MusicStarterBackend.Models
 {
-    public class Author
+    public class AuthorDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }

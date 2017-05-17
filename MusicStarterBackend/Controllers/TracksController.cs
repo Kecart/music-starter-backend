@@ -1,10 +1,10 @@
-﻿using System;
+﻿using MusicStarterBackend.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
-using MusicStarterBackend.Models;
 
 namespace MusicStarterBackend.Controllers
 {
@@ -13,6 +13,7 @@ namespace MusicStarterBackend.Controllers
     /// </summary>
     public class TracksController : ApiController
     {
+        /*
         /// <summary>
         /// Contains collection of authors.
         /// </summary>
@@ -21,6 +22,7 @@ namespace MusicStarterBackend.Controllers
         /// Contains collection of tracks.
         /// </summary>
         private List<Track> tracks = new List<Track>();
+        */
 
         /// <summary>
         /// Is used to insert sample data to collection: <see cref="authors"/> and <see cref="tracks"/>.
@@ -28,6 +30,7 @@ namespace MusicStarterBackend.Controllers
         /// </summary>
         private void Seed()
         {
+            /*
             authors.Add(new Author { Id = 1, Name = "Author1" });
             authors.Add(new Author { Id = 2, Name = "Author2" });
 
@@ -43,6 +46,7 @@ namespace MusicStarterBackend.Controllers
                 Id = 3, Title = "Track3", Duration = new TimeSpan(0, 2, 49),
                 DateTime = new DateTime(2017, 04, 13, 03, 06, 14), Rating = 4.0F, Author = authors[1]
             });
+            */
         }
 
         /// <summary>
@@ -59,9 +63,31 @@ namespace MusicStarterBackend.Controllers
         /// Is invoked when server receives GET api/tracks request.
         /// </summary>
         /// <returns>Collection of tracks</returns>
-        public IEnumerable<Track> Get()
+        public IEnumerable<TrackDTO> Get()
         {
-            return tracks;
+            return from track in Database.Container.TrackSet
+                   select new TrackDTO
+                   {
+                       Id = track.Id,
+                       Title = track.Title,
+                       Duration = track.Duration,
+                       DateTime = track.DateTime,
+                       Rating = track.Rating,
+                       File = track.File,
+
+                       Author = new AuthorDTO
+                       {
+                           Id = track.Author.Id,
+                           Name = track.Author.Name
+                       },
+                       Album = track.Album == null ? null :
+                           new AlbumDTO
+                           {
+                               Id = track.Album.Id,
+                               Name = track.Album.Name,
+                               CoverFile = track.Album.CoverFile
+                           }
+                   };
         }
 
         // GET api/tracks/5 
@@ -70,11 +96,33 @@ namespace MusicStarterBackend.Controllers
         /// </summary>
         /// <param name="id">Id parameter from GET request</param>
         /// <returns>If there is exactly one track with requested id, then that track. Otherwise, null.</returns>
-        public Track Get(int id)
+        public TrackDTO Get(int id)
         {
-            var requested_tracks = tracks.Where(track => track.Id == id);
+            var requested_tracks = Database.Container.TrackSet.Where(track => track.Id == id);
             if (requested_tracks.Count() != 1) return null;
-            return requested_tracks.First();
+            var retTrack = requested_tracks.First();
+            return new TrackDTO
+            {
+                Id = retTrack.Id,
+                Title = retTrack.Title,
+                Duration = retTrack.Duration,
+                DateTime = retTrack.DateTime,
+                Rating = retTrack.Rating,
+                File = retTrack.File,
+
+                Author = new AuthorDTO
+                {
+                    Id = retTrack.Author.Id,
+                    Name = retTrack.Author.Name
+                },
+                Album = retTrack.Album == null ? null :
+                           new AlbumDTO
+                           {
+                               Id = retTrack.Album.Id,
+                               Name = retTrack.Album.Name,
+                               CoverFile = retTrack.Album.CoverFile
+                           }
+            };
         }
     }
 }
